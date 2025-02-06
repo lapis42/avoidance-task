@@ -407,7 +407,9 @@ void checkSpeed() {
         else {
             if (isMoving) {
                 isMoving = false;
-                nextReward();
+                if (rewardDuration > 0) {
+                    nextReward();
+                }
                 if (debug) {
                     Serial.println("Animals stopped moving. Start rewarding...");
                 }
@@ -539,12 +541,17 @@ void checkCOM()
             }
             else if (cCOM == 'w') // setting reward duration
             {
+                delay(10);
                 rewardDuration = Serial.parseInt() * 1000;
-                if (rewardDuration <= 0)
-                    rewardDuration = 80000;
-                Serial.print("Reward duration: ");
-                Serial.print(rewardDuration);
-                Serial.println(" microseconds");
+                if (rewardDuration < 0) {
+                    rewardDuration = 0;
+                    Serial.println("Reward duration set to 0. No reward will be given.");
+                }
+                else {
+                    Serial.print("Reward duration: ");
+                    Serial.print(rewardDuration);
+                    Serial.println(" microseconds");
+                }
             }
             else if (cCOM == 'l') {
                 laserState = LASER_ON;
